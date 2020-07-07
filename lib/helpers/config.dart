@@ -1,0 +1,4 @@
+
+void initateConfigurations() {
+  print('done!!');
+}
