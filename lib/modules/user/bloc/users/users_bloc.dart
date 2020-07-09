@@ -10,33 +10,40 @@ import './users_events.dart';
 import './users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvents, UsersState> {
+
   UsersRepository usersRepository = UsersRepository();
 
   UsersBloc() : super(null);
 
   @override
   Stream<UsersState> mapEventToState(UsersEvents event) async* {
+
+      
+
     if (event is FetchUsers) {
 
-      yield* fetchUsersToState();
+      yield* fetchUsersToState(state);
     }
   }
 
-  Stream<UsersState> fetchUsersToState() async* {
+  Stream<UsersState> fetchUsersToState(UsersState state) async* {
     
     yield UsersLoading();
+
     ApiResponse<User> response = await usersRepository.fetchUsers();
 
     if (response.requestStatus == RequestStatus.server_error) {
       yield UsersFailure();
+     
     }
-   print(response.requestStatus);
+
     if (response.requestStatus == RequestStatus.success) {
    
       yield UsersSuccess(
           name: response.data.name,
           bio: response.data.bio,
-          email: response.data.email);
+          email: response.data.email, 
+      );
     }
 
 
